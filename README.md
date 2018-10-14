@@ -2,7 +2,7 @@
 A simple skill to shutdown/restart mycroft by voice.
 
 ## Description
-This skill allows the user to turn off (or restart) Mycroft gracefully, with a voice conformation (yes).
+This skill allows the user to turn off (or restart) Mycroft gracefully, with a voice confirmation (yes).
 
 ## Examples
  - "Shut down"
