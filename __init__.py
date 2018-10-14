@@ -17,17 +17,17 @@
 #
 # This is a simple skill based on the HelloWorld Skill that shuts down the computer when asking for it. 
 # It does not require root.
-from os.path import dirname
 
 from adapt.intent import IntentBuilder
-from mycroft.skills.core import MycroftSkill
+from mycroft.skills.core import MycroftSkill, intent_file_handler
 from mycroft.util.log import getLogger
 import os
-import time
+
 __author__ = 'eward'
 __author__ = 'BrokenClock'
 
 LOGGER = getLogger(__name__)
+
 
 
 class systemSkill(MycroftSkill):
@@ -36,29 +36,37 @@ class systemSkill(MycroftSkill):
         super(systemSkill, self).__init__(name="systemSkill")
 
     def initialize(self):
+        self.tasks = self.translate_namedvalues('tasks')
+
         shutdown_intent = IntentBuilder("shutdownIntent").\
-            require("shutdownKeyword").build()
+                          require("shutdownKeyword").build()
         self.register_intent(shutdown_intent, self.handle_shutdown_intent)
 
         restart_intent = IntentBuilder("restartIntent").\
-            require("restartKeyword").build()
+                         require("restartKeyword").build()
         self.register_intent(restart_intent,
                              self.handle_restart_intent)
 
+    def getUserConfirmation(self, task):
+        assert task
 
+        data = {'task' : task}
+        utter = self.ask_yesno('confirmation', data)
+
+        if utter == 'yes':
+            return True
+
+    @intent_file_handler('powerOff.intent')
     def handle_shutdown_intent(self, message):
-        self.speak_dialog("shuttingDown")
-        time.sleep(30)
-        os.system("systemctl poweroff")
+        if self.getUserConfirmation(self.tasks['poweroff']):
+            os.system("sudo poweroff")
 
+    @intent_file_handler('reboot.intent')
     def handle_restart_intent(self, message):
-        self.speak_dialog("restart")
-        time.sleep(30)
-        os.system("systemctl reboot")
-
-    def stop(self):
-        pass
+        if self.getUserConfirmation(self.tasks['reboot']):
+            os.system("sudo reboot")
 
 
 def create_skill():
     return systemSkill()
+
