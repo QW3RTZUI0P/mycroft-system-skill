@@ -66,6 +66,8 @@ class systemSkill(MycroftSkill):
         if self.getUserConfirmation(self.tasks['reboot']):
             os.system("sudo reboot")
 
+    def stop(self):
+        pass
 
 def create_skill():
     return systemSkill()
