@@ -46,6 +46,14 @@ class systemSkill(MycroftSkill):
                          require("restartKeyword").build()
         self.register_intent(restart_intent,
                              self.handle_restart_intent)
+        selfrestart_intent = IntentBuilder("selfrestartIntent").\
+                         require("selfrestartKeyword").build()
+        self.register_intent(selfrestart_intent,
+                             self.handle_selfrestart_intent)
+        selfshutdown_intent = IntentBuilder("selfshutdownIntent").\
+                          require("selfshutdownKeyword").build()
+        self.register_intent(selfshutdown_intent, self.handle_selfshutdown_intent)
+        
 
     def getUserConfirmation(self, task):
         assert task
@@ -65,6 +73,16 @@ class systemSkill(MycroftSkill):
     def handle_restart_intent(self, message):
         if self.getUserConfirmation(self.tasks['reboot']):
             os.system("sudo reboot")
+
+    @intent_file_handler('selfreboot.intent')
+    def handle_selfrestart_intent(self, message):
+        if self.getUserConfirmation(self.tasks['selfrestart']):
+            os.system("/home/pi/selfrestart.sh")
+
+    @intent_file_handler('selfshutdown.intent')
+    def handle_selfshutdown_intent(self, message):
+        if self.getUserConfirmation(self.tasks['selfpoweroff']):
+            os.system("/home/pi/mycroft-core/stop-mycroft.sh")
 
     def stop(self):
         pass

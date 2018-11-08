@@ -1,3 +1,5 @@
 # Key, Value
 reboot, reboot
-poweroff, power off
+poweroff, shutdown
+selfrestart, reboot me
+selfpoweroff, shutdown me
