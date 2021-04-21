@@ -61,7 +61,7 @@ class systemSkill(MycroftSkill):
         data = {'task' : task}
         utter = self.ask_yesno('confirmation', data)
 
-        if utter == 'yes':
+        if (utter == 'yes' or utter == 'ja'):
             return True
 
     @intent_file_handler('powerOff.intent')
