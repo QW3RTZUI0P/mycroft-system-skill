@@ -30,10 +30,10 @@ LOGGER = getLogger(__name__)
 
 
 
-class systemSkill(MycroftSkill):
+class SystemSkill(MycroftSkill):
 
     def __init__(self):
-        super(systemSkill, self).__init__(name="systemSkill")
+        super(SystemSkill, self).__init__(name="SystemSkill")
 
     def initialize(self):
         self.tasks = self.translate_namedvalues('tasks')
@@ -61,13 +61,13 @@ class systemSkill(MycroftSkill):
         data = {'task' : task}
         utter = self.ask_yesno('confirmation', data)
 
-        if (utter == 'yes' or utter == 'ja'):
+        if (utter == 'yes'):
             return True
 
     @intent_file_handler('powerOff.intent')
     def handle_shutdown_intent(self, message):
         if self.getUserConfirmation(self.tasks['poweroff']):
-            os.system("sudo poweroff")
+            os.system("sudo shutdown now")
 
     @intent_file_handler('reboot.intent')
     def handle_restart_intent(self, message):
@@ -88,5 +88,5 @@ class systemSkill(MycroftSkill):
         pass
 
 def create_skill():
-    return systemSkill()
+    return SystemSkill()
 
